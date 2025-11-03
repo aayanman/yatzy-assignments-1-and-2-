@@ -100,33 +100,58 @@ categories.forEach(cat=>{
     scoreBody.appendChild(row);
 });
 
-function renderDice(){
-    diceArea.innerHTML='';
-    const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
-    game.dice.values.forEach((v,i)=>{
-        const d=document.createElement('div');
-        d.className='die'+(game.dice.held[i]?' held':'');
-        d.textContent=faces[v-1];
-        d.addEventListener('click',()=>{game.dice.toggleHold(i);renderDice();});
+function renderDice(disabled = false){
+    diceArea.innerHTML = '';
+    const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+    game.dice.values.forEach((v, i) => {
+        const d = document.createElement('div');
+        d.className = 'die' + (game.dice.held[i] ? ' held' : '');
+        d.textContent = faces[v - 1];
+        if (disabled) {
+            d.style.opacity = '0.4';
+            d.style.cursor = 'not-allowed';
+        } else {
+            d.style.opacity = '1';
+            d.style.cursor = 'pointer';
+            d.addEventListener('click', () => {
+                game.dice.toggleHold(i);
+                renderDice();
+            });
+        }
         diceArea.appendChild(d);
     });
 }
 
 function updateUI(){
-    renderDice();
-    roundInfo.textContent=`Round: ${game.currentRound} / 13`;
-    rollInfo.textContent=`Rolls left: ${game.rollsLeft}`;
-    totalScore.textContent=game.engine.total();
-    const values=Object.values(game.engine.scoreTable);
-    [...scoreBody.children].forEach((row,i)=>{
-        const val=values[i];
-        const cell=row.querySelector('.val');
-        const btn=row.querySelector('button');
-        if(val===null){cell.textContent='—';btn.disabled=false;btn.style.opacity='1';}
-        else{cell.textContent=val;btn.disabled=true;btn.style.opacity='0.5';}
+
+    const disableDice = (game.currentRound === 1 && game.rollsLeft === 3);
+
+
+    if (disableDice) game.dice.values = Array(game.dice.numDice).fill(1);
+
+    renderDice(disableDice);
+    roundInfo.textContent = `Round: ${game.currentRound} / 13`;
+    rollInfo.textContent = `Rolls left: ${game.rollsLeft}`;
+    totalScore.textContent = game.engine.total();
+
+    const values = Object.values(game.engine.scoreTable);
+    [...scoreBody.children].forEach((row, i) => {
+        const val = values[i];
+        const cell = row.querySelector('.val');
+        const btn = row.querySelector('button');
+        if (val === null) {
+            cell.textContent = '—';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        } else {
+            cell.textContent = val;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+        }
     });
 }
-
 rollBtn.addEventListener('click',()=>game.rollDice());
 newBtn.addEventListener('click',()=>game.startNewGame());
 game.startNewGame();
