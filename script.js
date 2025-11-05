@@ -124,10 +124,13 @@ function renderDice(disabled = false){
 
 function updateUI(){
 
-    const disableDice = (game.currentRound === 1 && game.rollsLeft === 3);
-
+    const disableDice = (game.rollsLeft === 3);
+    const disableScoring = (game.rollsLeft === 3);
 
     if (disableDice) game.dice.values = Array(game.dice.numDice).fill(1);
+
+    renderDice(disableDice);
+
 
     renderDice(disableDice);
     roundInfo.textContent = `Round: ${game.currentRound} / 13`;
@@ -141,15 +144,16 @@ function updateUI(){
         const btn = row.querySelector('button');
         if (val === null) {
             cell.textContent = '—';
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
+            btn.disabled = disableScoring; // disable until rolled
+            btn.style.opacity = disableScoring ? '0.5' : '1';
+            btn.style.cursor = disableScoring ? 'not-allowed' : 'pointer';
         } else {
             cell.textContent = val;
             btn.disabled = true;
             btn.style.opacity = '0.5';
             btn.style.cursor = 'not-allowed';
         }
+
     });
 }
 rollBtn.addEventListener('click',()=>game.rollDice());
