@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yatzy — Assignment 1</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="top">
+    <h1>Yatzy</h1>
+    <div class="meta">
+        <span id="roundInfo">Round: 1 / 13</span>
+        <span id="rollInfo">Rolls left: 3</span>
+    </div>
+</header>
+
+<main class="grid">
+    <section class="panel">
+        <h2 class="panel__title">Dice</h2>
+        <div class="dice" id="diceArea"></div>
+        <div class="controls">
+            <button id="rollBtn" class="btn btn--primary">Roll Dice</button>
+            <button id="newBtn" class="btn">New Game</button>
+        </div>
+        <p class="hint">Click a die to hold/unhold. Up to three rolls per round.</p>
+    </section>
+
+    <section class="panel">
+        <h2 class="panel__title">Scorecard</h2>
+        <table class="card" id="scorecard">
+            <thead>
+            <tr><th>Category</th><th>Score</th><th>Pick</th></tr>
+            </thead>
+            <tbody id="scoreBody"></tbody>
+            <tfoot>
+            <tr class="grand"><td>Grand Total</td><td id="totalScore">0</td><td></td></tr>
+            </tfoot>
+        </table>
+    </section>
+</main>
+
+<footer class="foot">
+    <small>Assignment 1 — Yatzy</small>
+</footer>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
